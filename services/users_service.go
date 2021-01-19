@@ -4,13 +4,21 @@ import (
 	"fmt"
 
 	"github.com/davidhwang-ij/bookstore_users-api/domain/users"
+	"github.com/davidhwang-ij/bookstore_users-api/utils/date_utils"
 	"github.com/davidhwang-ij/bookstore_users-api/utils/errors"
+)
+
+const (
+	statusActive = "active"
 )
 
 func CreateUser(user users.User) (*users.User, *errors.RestErr) {
 	if err := user.Validate(); err != nil {
 		return nil, err
 	}
+
+	user.Status = statusActive
+	user.DateCreated = date_utils.GetNowDBFormat()
 
 	if err := user.Save(); err != nil {
 		return nil, err
