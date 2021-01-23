@@ -1,2 +1,2 @@
 # bookstore_users-api
-Go Rest API Practice
+Go Bookstore Users Rest API
