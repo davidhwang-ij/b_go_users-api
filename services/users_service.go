@@ -93,7 +93,10 @@ func (s *usersService) SearchUser(status string) (users.Users, *errors.RestErr) 
 }
 
 func (s *usersService) LoginUser(request users.LoginRequest) (*users.User, *errors.RestErr) {
-	dao := &users.User{}
+	dao := &users.User{
+		Email:    request.Email,
+		Password: crypto_utils.GetMd5(request.Password),
+	}
 	if err := dao.FindByEmailAndPassword(); err != nil {
 		return nil, err
 	}
