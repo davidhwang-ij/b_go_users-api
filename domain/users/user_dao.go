@@ -2,10 +2,12 @@ package users
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/davidhwang-ij/bookstore_users-api/datasource/mysql/users_db"
 	"github.com/davidhwang-ij/bookstore_users-api/logger"
 	"github.com/davidhwang-ij/bookstore_users-api/utils/errors"
+	"github.com/davidhwang-ij/bookstore_users-api/utils/mysql_utils"
 )
 
 const (
@@ -133,6 +135,9 @@ func (user *User) FindByEmailAndPassword() *errors.RestErr {
 
 	result := stmt.QueryRow(user.Email, user.Password)
 	if getErr := result.Scan(&user.Id, &user.FirstName, &user.LastName, &user.Email, &user.DateCreated, &user.Status); getErr != nil {
+		if strings.Contains(getErr.Error(), mysql_utils.ErrorNoRows) {
+			return errors.NewNotFoundError("invalid user credentials")
+		}
 		logger.Error("error when trying to prepare get user by email and password", getErr)
 		return errors.NewInternalServerError("database error")
 	}
