@@ -6,6 +6,10 @@ import (
 	"github.com/davidhwang-ij/bookstore_users-api/utils/errors"
 )
 
+const (
+	StatusActive = "active"
+)
+
 type User struct {
 	Id          int64  `json:"id"`
 	FirstName   string `json:"first_name"`
